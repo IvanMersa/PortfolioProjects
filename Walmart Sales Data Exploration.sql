@@ -34,26 +34,26 @@ SELECT *
   
   SELECT CustomerName, Profit, percinitl
   FROM(select*, NTILE(100) OVER(partition by CustomerName order by Profit) as percinitl, YEAR(ShipDate) as Year
-    FROM Walmart.dbo.WalmartRetailData) a
-	WHERE percinitl < 5 and Year = 2015
-	ORDER BY Profit DESC, percinitl 
+  FROM Walmart.dbo.WalmartRetailData) a
+  WHERE percinitl < 5 and Year = 2015
+  ORDER BY Profit DESC, percinitl 
 
   -- growth year by year
   
   SELECT year, profit_by_year, (((profit_by_year-last_year)/last_year)*100) as growth
-FROM(
+  FROM(
   SELECT year, profit_by_year,
   LAG(profit_by_year, 1) OVER(order by year) as last_year
   FROM(
   SELECT year, SUM(profit_by_year) as profit_by_year
   FROM(
- SELECT ShipDate, YEAR(ShipDate) as year,
+  SELECT ShipDate, YEAR(ShipDate) as year,
 				SUM(Profit) profit_by_year
-FROM Walmart.dbo.WalmartRetailData
-WHERE ShipDate is not null
-GROUP BY ShipDate) a
-GROUP BY year) a 
-) a
+  FROM Walmart.dbo.WalmartRetailData
+  WHERE ShipDate is not null
+  GROUP BY ShipDate) a
+  GROUP BY year) a 
+  ) a
 
 -- Standardize Data Format and analyzing shipping time
 
@@ -70,10 +70,10 @@ SELECT ProductName, ShipMode, ShippingCost, Days,
 RANK() OVER(Partition by ProductName order by Days, ShippingCost   ) as Rank
 FROM(
 SELECT  ProductName, ShipMode, ShipDate, OrderDate,ShippingCost,
- CAST(ShipDate as INT) - CAST(OrderDate as INT) as Days
- FROM Walmart.dbo.WalmartRetailData
- GROUP BY ProductName, ShipMode, ShipDate, OrderDate,ShippingCost
-  ) a
-  )a
-  WHERE Rank <= 3
-  ORDER BY Rank, Days DESC, ShippingCost DESC
+CAST(ShipDate as INT) - CAST(OrderDate as INT) as Days
+FROM Walmart.dbo.WalmartRetailData
+GROUP BY ProductName, ShipMode, ShipDate, OrderDate,ShippingCost
+ ) a
+ )a
+WHERE Rank <= 3
+ORDER BY Rank, Days DESC, ShippingCost DESC

@@ -135,7 +135,7 @@ WHERE OwnerAddressNew is null
 
 UPDATE Portfolio.dbo.HousingData
 SET OwnerAddressNew = ISNULL( OwnerAddressNew, PropertyAddressNew) 
-											where OwnerAddressNew is null
+WHERE OwnerAddressNew is null
 
 SELECT PropertyCityNew, OwnerCityNew, ISNULL( OwnerCityNew, PropertyCityNew) as populating
 FROM Portfolio.dbo.HousingData
@@ -143,4 +143,4 @@ WHERE OwnerCityNew is null
 
 UPDATE Portfolio.dbo.HousingData
 SET OwnerCityNew = ISNULL( OwnerCityNew, PropertyCityNew) 
-											where OwnerCityNew is null
+WHERE OwnerCityNew is null

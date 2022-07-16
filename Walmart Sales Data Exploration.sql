@@ -30,14 +30,6 @@ SELECT *
   GROUP BY day
   ORDER BY avg_profit desc
 
-  -- 5% most profitable customers in 2015
-  
-  SELECT CustomerName, Profit, percinitl
-  FROM(select*, NTILE(100) OVER(partition by CustomerName order by Profit) as percinitl, YEAR(ShipDate) as Year
-  FROM Walmart.dbo.WalmartRetailData) a
-  WHERE percinitl < 5 and Year = 2015
-  ORDER BY Profit DESC, percinitl 
-
   -- growth year by year
   
   SELECT year, profit_by_year, (((profit_by_year-last_year)/last_year)*100) as growth
